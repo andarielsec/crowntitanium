@@ -1,2 +1,4 @@
-# fungoid
-a bootstrapping befunge-93 dialect for the slightly lunatic programmer
+# WRAITH
+
+a house-made asymmetric supercipher encryption with post-quantum resistance
+
