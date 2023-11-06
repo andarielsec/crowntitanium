@@ -24,6 +24,6 @@ an in-house made asymmetric supercipher encryption with post-quantum resistance.
 5. **Kyber-CRYSTAL and dilithium (Post-Quantum Resistant)**: The last encryption layer is a Kyber-CRYSTAL and dilithium algorithm which is known to be extremely performant.
     1. Generates Public and Private Key using KEM
 
-- As you see CROWNTITANIUM uses 11 different keys for a complete encryption or decryption of a file. 
+- As you see CROWNTITANIUM uses 11 different keys for a complete encryption or decryption of a file. A single file goes through seven different encryption layers until it is fully encrypted.
 
 > add support for custom CROWNTITANIUM-over-HTTPS (CoH) and signing support.
