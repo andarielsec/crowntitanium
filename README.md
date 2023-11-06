@@ -1,4 +1,4 @@
-# CROWNTITANIUM
+# CROWNTITANIUM - Asymmetric post-quantum resistant supercipher with 2048 bit security 
 
 a house-made asymmetric supercipher encryption with post-quantum resistance
 
@@ -21,6 +21,7 @@ a house-made asymmetric supercipher encryption with post-quantum resistance
     1. Generates Public and Private Key using KEM
 5. **Kyber-CRYSTAL and dilithium (Post-Quantum Resistant)**
     1. Generates Public and Private Key using KEM
-       
+
+- As you see CROWNTITANIUM uses 11 different keys for a complete encryption or decryption of a file. 
 
 > add support for custom CROWNTITANIUM-over-HTTPS (CoH) and signing support.
