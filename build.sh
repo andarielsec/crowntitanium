@@ -19,6 +19,7 @@ cd c4-kyber-CRYSTAL/kyber/ref
 make shared
 cp *.so /usr/local/lib
 cd ..
+pwd
 ./bootstrap.sh
 ./configure --prefix=/usr/local/lib
 make -j
