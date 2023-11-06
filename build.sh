@@ -24,5 +24,8 @@ cd ../..
 ./configure --prefix=/usr/local/lib
 make -j
 make install
+cp kybertest_keygen ../bin/c4-keygen
+cp kybertest_encrypt ../bin/c4-encrypt
+cp kybertest_Decrypt ../bin/c4-decrypt
 
 echo "done installing and building all four cipher layers."
