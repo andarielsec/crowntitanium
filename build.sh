@@ -5,7 +5,7 @@ g++ c1-aes256/aes256.cpp -o bin/c1
 echo "building binaries for the second cipher layer: c2-CAMELLIA-POLY..."
 echo ""
 apt-get -y install build-essential libssl-dev
-gcc ./c2-CAMELLIA-POLY/cryptolandi.c -o bin/c3  -lssl -lcrypto
+gcc ./c2-CAMELLIA-POLY/cryptolandi.c -o ../bin/c2  -lssl -lcrypto
 cp bin/c3 /usr/bin/
 
 echo "building binaries for the third cipher layer: c3-NTRUprime..."
