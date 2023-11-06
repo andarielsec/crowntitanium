@@ -1,6 +1,6 @@
 # CROWNTITANIUM - Asymmetric post-quantum resistant supercipher with 2048 bit security 
 
-a house-made asymmetric supercipher encryption with post-quantum resistance
+an in-house made asymmetric supercipher encryption with post-quantum resistance. intended to be used for file encryption. possibly the most powerful open-source encryption to-date. 
 
 ## Features
 
