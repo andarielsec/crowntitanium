@@ -1,7 +1,7 @@
 1. cd kyber/ref
 2. make shared
 3. cp *.so /usr/local/lib
-4. cd ..
+4. cd ../..
 5. ./bootstrap.sh
 6. ./configure --prefix=/usr/local/lib
 7. make -j
