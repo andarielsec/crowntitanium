@@ -1,3 +1,5 @@
+```
+apt install python3 python3-pip -y
 pip3 install sympy
 
 1. generate keys
@@ -8,3 +10,4 @@ python3 src/encode -pub key.pub -m message.txt -o message.ntru
 
 3. decrypt message
 pyhton3 src/decrypt -priv key.priv -m message.ntru -o message.txt.new
+```
