@@ -336,155 +336,46 @@ uint8_t chartohex(char c) {
 }
 
 int main(int argc, char *argv[]) {
-  printf("This program encrypts/decrypts files\n");
-  printf("using AES256 encryption with ECB mode of operation\n");
-  printf("and ANSI X9.23 padding method\n\n");
+    int opt;
+    char *loadFile = NULL;
+    char *loadOtherFile = NULL;
+    int flagC = 0;  // Flag without an argument
 
-  printf("The maximum supported file size is 4GB\n");
-  printf("Enough RAM is required to load the file\n");
-  printf("Encrypted files are 1 to 16 bytes larger than the original ones\n");
+    struct option long_options[] = {
+        {"loadfile", required_argument, 0, 'a'},
+        {"load-otherfile", required_argument, 0, 'b'},
+        {"genkey", no_argument, &flagC, 1},
+        {0, 0, 0, 0}
+    };
 
-  printf("\nChoose an option:");
-  printf("\n\t1) Generate random key");
-  printf("\n\t2) Load key from file");
-  printf("\n\t3) Type key\n");
-
-  int opt;
-  char *loadFile = NULL;
-  char *loadOtherFile = NULL;
-
-  struct option long_options[] = {
-      {"genkey", required_argument, 0, 'genkey'},
-      {"loadkey", required_argument, 0, 'loadkey'},
-      {"encrypt-file", required_argument, 0, 'encrypt-file'},
-      {"decrypt-file", required_argument, 0, 'decrypt-file'},
-      {0, 0, 0, 0}
-  };
-
-  while ((opt = getopt_long(argc, argv, "genkey:loadkey:", long_options, NULL)) != -1) {
-      switch (opt) {
-          case 'genkey':
-              loadFile = optarg;
-              printf("Load file: %s\n", loadFile);
-              break;
-          case 'loadkey':
-              loadOtherFile = optarg;
-              printf("Load other file: %s\n", loadOtherFile);
-              break;
-          default:
-              fprintf(stderr, "Usage: %s --genkey | --loadkey <file>\n", argv[0]);
-              exit(EXIT_FAILURE);
-      }
-  } 
-  
-  uint32_t opt;
-  scanf("%u", &opt);
-  assert(opt == 1 || opt == 2 || opt == 3);
-  printf("\n");
-  uint8_t key[32];
-
-  if (opt == 1) {
-    printf("Loading Source of Entropy\t");
-    srand(time(NULL));
-    printf("COMPLETE\n");
-    printf("Generating Keys\t\t\t");
-    for (uint8_t i = 0; i < 32; i++)
-      key[i] = rand() % 256;
-    printf("COMPLETE\n");
-  } else if (opt == 2) {
-    printf("Enter the name of the binary file containing the key\n");
-    char keyf[32];
-    scanf("%s", keyf);
-    FILE* kfile = fopen(keyf, "rb");
-    fseek(kfile, 0, SEEK_END);
-    uint8_t ksize = ftell(kfile);
-    rewind(kfile);
-    assert(ksize == 32);
-    fread(key, 1, ksize, kfile);
-    fclose(kfile);
-    printf("Key loaded from file %s\n", keyf);
-  } else {
-    char digit1, digit2;
-    printf("Enter the key (64 hexadecimal digits):\n");
-    for (uint8_t i = 0; i < 32; i++) {
-      do {
-        digit1 = getchar();
-      } while (digit1 == ' ' || digit1 == '\n');
-      do {
-        digit2 = getchar();
-      } while (digit2 == ' ' || digit2 == '\n');
-      key[i] = chartohex(digit1) * 16 + chartohex(digit2);
+    while ((opt = getopt_long(argc, argv, "a:b:", long_options, NULL)) != -1) {
+        switch (opt) {
+            case 'a':
+                loadFile = optarg;
+                printf("Load file: %s\n", loadFile);
+                break;
+            case 'b':
+                loadOtherFile = optarg;
+                printf("Load other file: %s\n", loadOtherFile);
+                break;
+            case 0:  // This case handles long options without short equivalents
+                if (long_options[optind].flag != 0) {
+                    break;  // This option is already handled by getopt_long
+                }
+                printf("Flag 'C' is set.\n");
+                flagC = 1;
+                break;
+            default:
+                fprintf(stderr, "Usage: %s --loadfile <file> --load-otherfile <file> [--flagC]\n", argv[0]);
+                exit(EXIT_FAILURE);
+        }
     }
-    printf("Key readed\n");
-  }
 
-  printf("Key:\n");
-  PrintHex(key, 32);
-  printf("\n");
+    // Process additional options or perform other tasks after getopt_long loop
 
-  FILE* pFile = fopen("key.bin", "wb");
-  fwrite(key, sizeof(uint8_t), 32, pFile);
-  fclose(pFile);
-  printf("Key has been stored in the file key.bin\n\n");
+    if (flagC) {
+        // Additional processing for flagC, if needed
+    }
 
-  printf("Enter name of the file to Encrypt/Decrypt:\n");
-  printf("WARNING: The file will be overwritten\n");
-  char fname[32];
-  scanf("%s", fname);
-
-  FILE* file = fopen(fname, "rb+");
-  fseek(file, 0, SEEK_END);
-  uint32_t size = ftell(file);
-
-  printf("\nChoose an option:");
-  printf("\n\t1) Encrypt");
-  printf("\n\t2) Decrypt");
-  printf("\n");
-  scanf("%u", &opt);
-  assert(opt == 1 || opt == 2);
-  printf("\n");
-
-  if (opt == 1) {
-    uint8_t len = AES_BLOCKLEN - size % AES_BLOCKLEN;
-    uint8_t* pad = new uint8_t[len];
-// ANSI X9.23
-    for (uint8_t i = 0; i < len - 1; i++)
-      pad[i] = 0x00;
-    pad[len - 1] = len;
-// PKCS#7
-//    for (uint8_t i = 0; i < len; i++)
-//      pad[i] = len;
-    fwrite(pad, sizeof(uint8_t), len, file);
-    delete[] pad;
-    size += len;
-    printf("%d bytes have been added to the file to encrypt it\n", len);
-  }
-  rewind(file);
-  uint8_t* input = new uint8_t[size];
-  fread(input, 1, size, file);
-  fclose(file);
-  time_t start = time(NULL);
-  if (opt == 1) {
-    printf("Estimated Encryption time: %d seconds\n", size / 50000000);
-    AES_encrypt(key, input, size);
-    printf("Encrypted!\n");
-  } else {
-    printf("Estimated Decryption time: %d seconds\n", size / 20000000);
-    AES_decrypt(key, input, size);
-    printf("Decrypted!\n");
-  }
-  time_t end = time(NULL);
-  uint32_t diff = difftime(end, start);
-  printf("%d bytes have been encrypted / decrypted in %d seconds\n", size, diff);
-  if (opt == 2) {
-    uint32_t del = input[size - 1];
-    size -= del;
-    printf("%d bytes have been removed from the decrypted file\n", del);
-  }
-  pFile = fopen(fname, "wb");
-  fwrite(input, sizeof(uint8_t), size, pFile);
-  fclose(pFile);
-  delete[] input;
-  printf("File saved on disk\n");
-  return 0;
+    return 0;
 }
