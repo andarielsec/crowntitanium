@@ -6,4 +6,4 @@ cd ../..
 ./configure --prefix=/usr/local/lib
 make -j
 make install
-cp kybertest_keygen kybertest_encrypt kybertest_decrypt ../bin
+cp minicrown_keygen minicrown_encrypt minicrown_decrypt ../bin
