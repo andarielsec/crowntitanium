@@ -1,4 +1,5 @@
 if command -v g++ automake python3 python3-pip build-essential libssl-dev make &> /dev/null; then
+    echo ""
 else
     apt-get update
     apt-get install g++ automake python3 python3-pip build-essential libssl-dev make -y
