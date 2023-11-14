@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <limits.h>
+#include <getopt.h>
 
 #define AES_BLOCKLEN 16 // Block length in bytes AES is 128b block only
 #define AES_keyExpSize 240
@@ -334,7 +335,7 @@ uint8_t chartohex(char c) {
   return res;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
   printf("This program encrypts/decrypts files\n");
   printf("using AES256 encryption with ECB mode of operation\n");
   printf("and ANSI X9.23 padding method\n\n");
@@ -348,6 +349,34 @@ int main() {
   printf("\n\t2) Load key from file");
   printf("\n\t3) Type key\n");
 
+  int opt;
+  char *loadFile = NULL;
+  char *loadOtherFile = NULL;
+
+  struct option long_options[] = {
+      {"genkey", required_argument, 0, 'genkey'},
+      {"loadkey", required_argument, 0, 'loadkey'},
+      {"encrypt-file", required_argument, 0, 'encrypt-file'},
+      {"decrypt-file", required_argument, 0, 'decrypt-file'},
+      {0, 0, 0, 0}
+  };
+
+  while ((opt = getopt_long(argc, argv, "genkey:loadkey:", long_options, NULL)) != -1) {
+      switch (opt) {
+          case 'genkey':
+              loadFile = optarg;
+              printf("Load file: %s\n", loadFile);
+              break;
+          case 'loadkey':
+              loadOtherFile = optarg;
+              printf("Load other file: %s\n", loadOtherFile);
+              break;
+          default:
+              fprintf(stderr, "Usage: %s --genkey | --loadkey <file>\n", argv[0]);
+              exit(EXIT_FAILURE);
+      }
+  } 
+  
   uint32_t opt;
   scanf("%u", &opt);
   assert(opt == 1 || opt == 2 || opt == 3);
