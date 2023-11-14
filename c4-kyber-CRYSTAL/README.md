@@ -1,3 +1,5 @@
+```
+apt install automake
 1. cd kyber/ref
 2. make shared
 3. cp *.so /usr/local/lib
@@ -14,3 +16,4 @@ testing
 3. cat secret.txt | kybertest_encrypt -r mykey.pub > secret.kyb
 4. cat secret.kyb | kybertest_decrypt -k mykey.priv > secret.new.txt
 
+```
