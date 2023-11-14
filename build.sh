@@ -1,25 +1,17 @@
-echo "building binaries for the first cipher layer: c1-aes256..."
-echo ""
+if command -v g++ automake python3 python3-pip build-essential libssl-dev make &> /dev/null; then
+else
+    apt-get update
+    apt-get install g++ automake python3 python3-pip build-essential libssl-dev make -y
+    pip3 install sympy
+fi
+
 g++ c1-aes256/aes256.cpp -o bin/c1
-
-echo "building binaries for the second cipher layer: c2-CAMELLIA-POLY..."
-echo ""
-apt-get -y install build-essential libssl-dev
 gcc ./c2-CAMELLIA-POLY/cryptolandi.c -o bin/c2  -lssl -lcrypto
-cp /bin/c2 /usr/bin/
 
-echo "building binaries for the third cipher layer: c3-NTRUprime..."
-echo ""
-apt-get install python3 -y
-python3 -m pip install sympy
-
-echo "building binaries for the fourth cipher layer: c4-kyber-CRYSTAL..."
-echo ""
 cd c4-kyber-CRYSTAL/kyber/ref
 make shared
 cp *.so /usr/local/lib
 cd ../..
-
 ./bootstrap.sh
 ./configure --prefix=/usr/local/lib
 make -j
@@ -28,4 +20,4 @@ cp kybertest_keygen ../bin/c4-keygen
 cp kybertest_encrypt ../bin/c4-encrypt
 cp kybertest_decrypt ../bin/c4-decrypt
 
-echo "done installing and building all four cipher layers."
+echo "installed everything."
