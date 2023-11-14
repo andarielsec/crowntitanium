@@ -21,4 +21,6 @@ cp kybertest_keygen ../bin/c4-keygen
 cp kybertest_encrypt ../bin/c4-encrypt
 cp kybertest_decrypt ../bin/c4-decrypt
 
+echo ""
 echo "installed everything."
+echo ""
